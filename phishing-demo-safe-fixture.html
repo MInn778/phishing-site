@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KB국민은행 보안 인증 - 테스트 Fixture</title>
+  <style>
+    :root{
+      --bg:#f5f6f8;
+      --card:#ffffff;
+      --text:#202124;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --warn:#b42318;
+      --warn-bg:#fff1f0;
+      --accent:#f6c344;
+      --accent-dark:#222;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,"Noto Sans KR","Malgun Gothic",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .notice{
+      background:var(--warn-bg);
+      color:var(--warn);
+      border-bottom:1px solid #f2c2be;
+      padding:14px 20px;
+      text-align:center;
+      font-weight:700;
+      line-height:1.5;
+    }
+    .wrap{
+      width:min(920px, calc(100% - 32px));
+      margin:36px auto 56px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .logo{
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      background:var(--accent);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      color:#222;
+    }
+    .brand h1{
+      margin:0;
+      font-size:26px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 8px 24px rgba(0,0,0,.05);
+    }
+    .alert{
+      background:#fff8e6;
+      border:1px solid #f3d17a;
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:22px;
+      line-height:1.6;
+    }
+    .alert strong{display:block;margin-bottom:6px}
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .field{display:flex;flex-direction:column;gap:7px}
+    label{font-weight:700;font-size:14px}
+    input{
+      width:100%;
+      border:1px solid #cfd4dc;
+      border-radius:10px;
+      padding:12px 13px;
+      font-size:15px;
+      background:#fff;
+    }
+    .full{grid-column:1/-1}
+    button{
+      width:100%;
+      margin-top:22px;
+      border:0;
+      border-radius:10px;
+      padding:14px 16px;
+      background:var(--accent);
+      color:var(--accent-dark);
+      font-weight:800;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .safe{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:10px;
+      background:#eef7ee;
+      border:1px solid #b7d8ba;
+      color:#285c2d;
+      line-height:1.6;
+      font-size:14px;
+    }
+    .meta{
+      margin-top:20px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+    @media (max-width:700px){
+      .grid{grid-template-columns:1fr}
+      .full{grid-column:auto}
+      .card{padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand">
+      <div class="logo">KB</div>
+      <div>
+        <h1>KB국민은행 보안 인증</h1>
+        <div style="color:#6b7280;margin-top:4px;">계좌 보호를 위한 추가 본인확인</div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="alert">
+        <strong>긴급 보안 안내</strong>
+        비정상적인 접근이 감지되어 계좌 이용이 제한될 수 있습니다.
+        오늘 안에 즉시 본인인증을 완료해 주세요.
+      </div>
+
+      <!--
+        SAFE TEST FIXTURE:
+        - action 없음
+        - 실제 전송 없음
+        - onsubmit에서 무조건 차단
+        - 입력값 저장/수집 안 함
+      -->
+      <form id="demoForm" method="post" onsubmit="return blockSubmit(event);">
+        <div class="grid">
+          <div class="field">
+            <label for="userid">아이디</label>
+            <input id="userid" name="userid" type="text" autocomplete="off"
+                   placeholder="사용자 아이디" />
+          </div>
+
+          <div class="field">
+            <label for="password">비밀번호</label>
+            <input id="password" name="password" type="password" autocomplete="off"
+                   placeholder="비밀번호" />
+          </div>
+
+          <div class="field">
+            <label for="otp">OTP 인증번호</label>
+            <input id="otp" name="otp" type="text" inputmode="numeric" autocomplete="off"
+                   placeholder="6자리 인증번호" />
+          </div>
+
+          <div class="field">
+            <label for="phone">휴대폰번호</label>
+            <input id="phone" name="phone" type="tel" autocomplete="off"
+                   placeholder="010-0000-0000" />
+          </div>
+
+          <div class="field full">
+            <label for="account">계좌번호</label>
+            <input id="account" name="account" type="text" autocomplete="off"
+                   placeholder="계좌번호 입력" />
+          </div>
+        </div>
+
+        <button type="submit">즉시 본인 인증</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    function blockSubmit(event){
+      if (event) event.preventDefault();
+
+      // 입력값을 읽거나 저장하지 않음.
+      // fetch / XMLHttpRequest / beacon / form action 등 네트워크 전송 없음.
+      document.getElementById("result").textContent =
+        "테스트용 페이지이므로 제출이 차단되었습니다. 입력값은 저장되거나 전송되지 않습니다.";
+
+      return false;
+    }
+  </script>
+</body>
+</html>
